@@ -5,7 +5,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![PokéAPI](https://img.shields.io/badge/PokéAPI-EF5350?style=for-the-badge&logo=pokemon&logoColor=white)
  
-Aplicación web interactiva que consume la **PokéAPI** para explorar, buscar y filtrar pokémon. Desarrollada con HTML, CSS y JavaScript vanilla como parte del Taller Evaluativo 1 de Ingeniería Web 2026.
+Aplicación web interactiva que consume la **PokéAPI** para explorar, buscar y filtrar pokémon. Desarrollada con HTML, CSS y JavaScript vanilla
  
 
 ## Capturas de pantalla
@@ -92,9 +92,4 @@ No requiere autenticación ni API key.
 - [PokéAPI](https://pokeapi.co) — API REST pública
 - [Google Fonts](https://fonts.google.com) — Hanken Grotesk + Inter
 
----
 
-## Autor
-
-Taller Evaluativo 1 · Ingeniería Web 2026  
-Profesor: Juan Pablo Arango
