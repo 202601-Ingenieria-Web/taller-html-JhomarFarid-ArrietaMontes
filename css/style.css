@@ -370,49 +370,6 @@ img {
   animation-delay: 0.3s;
 }
 
-/* Brillo de color del tipo en el fondo de la tarjeta */
-.pokemon-card::before {
-  content: "";
-  position: absolute;
-  top: -40%;
-  right: -20%;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    var(--type-color, var(--accent-red)) 0%,
-    transparent 70%
-  );
-  opacity: 0.07;
-  transition: opacity var(--transition);
-}
-
-/* Pokébola decorativa de fondo */
-.pokemon-card::after {
-  content: "";
-  position: absolute;
-  bottom: -30px;
-  right: -30px;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 20px solid rgba(255, 255, 255, 0.03);
-  pointer-events: none;
-}
-
-.pokemon-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: var(--type-color, var(--accent-red));
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px var(--type-color, var(--accent-red));
-}
-
-.pokemon-card:hover::before {
-  opacity: 0.18;
-}
-
 /* ID del pokémon */
 .card-id {
   font-family: var(--font-mono);
@@ -976,4 +933,138 @@ img {
 /* Ocultar paginación durante búsquedas individuales */
 .pagination.hidden {
   display: none;
+}
+
+/* ===================================================
+   FILTROS POR TIPO
+   =================================================== */
+
+/* Contenedor scrolleable horizontal en móvil */
+.type-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 860px;
+  margin: 1.2rem auto 0;
+  padding: 0 4px;
+}
+
+/* Chip de filtro base */
+.type-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1.5px solid var(--border-card);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.type-filter-btn:hover {
+  border-color: var(--card-type-color, var(--accent-red));
+  color: var(--card-type-color, var(--accent-red));
+  transform: translateY(-2px);
+}
+
+/* Estado activo: fondo sólido del color del tipo */
+.type-filter-btn.active {
+  background: var(--card-type-color, var(--accent-red));
+  border-color: var(--card-type-color, var(--accent-red));
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 14px
+    color-mix(
+      in srgb,
+      var(--card-type-color, var(--accent-red)) 40%,
+      transparent
+    );
+}
+
+/* Botón "Todos" — usa el rojo de acento */
+.type-filter-btn[data-type="all"] {
+  --card-type-color: var(--accent-red);
+}
+.type-filter-btn[data-type="all"].active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+/* Asignar color de tipo a cada chip usando la misma función getTypeColor */
+.type-filter-btn.type-fire {
+  --card-type-color: #ff6b35;
+}
+.type-filter-btn.type-water {
+  --card-type-color: #4cc9f0;
+}
+.type-filter-btn.type-grass {
+  --card-type-color: #57cc99;
+}
+.type-filter-btn.type-electric {
+  --card-type-color: #ffd166;
+}
+.type-filter-btn.type-psychic {
+  --card-type-color: #f72585;
+}
+.type-filter-btn.type-ice {
+  --card-type-color: #90e0ef;
+}
+.type-filter-btn.type-dragon {
+  --card-type-color: #7b2fbe;
+}
+.type-filter-btn.type-dark {
+  --card-type-color: #564e57;
+}
+.type-filter-btn.type-fairy {
+  --card-type-color: #ff85a1;
+}
+.type-filter-btn.type-fighting {
+  --card-type-color: #c77dff;
+}
+.type-filter-btn.type-poison {
+  --card-type-color: #9b5de5;
+}
+.type-filter-btn.type-ground {
+  --card-type-color: #d4a373;
+}
+.type-filter-btn.type-rock {
+  --card-type-color: #b5838d;
+}
+.type-filter-btn.type-bug {
+  --card-type-color: #95d5b2;
+}
+.type-filter-btn.type-ghost {
+  --card-type-color: #6a0572;
+}
+.type-filter-btn.type-steel {
+  --card-type-color: #adb5bd;
+}
+.type-filter-btn.type-flying {
+  --card-type-color: #90dbf4;
+}
+.type-filter-btn.type-normal {
+  --card-type-color: #adb5bd;
+}
+
+/* En móvil: scroll horizontal en lugar de wrap */
+@media (max-width: 600px) {
+  .type-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .type-filters::-webkit-scrollbar {
+    display: none;
+  }
 }

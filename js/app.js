@@ -81,6 +81,8 @@ const modalWeight = document.getElementById("modal-weight");
 const modalAbilities = document.getElementById("modal-abilities");
 const modalStatsList = document.getElementById("modal-stats-list");
 
+const typeFilters = document.getElementById("type-filters");
+
 /* ================================================================
    3. ESTADO DE LA APLICACIÓN
    ================================================================ */
@@ -93,6 +95,9 @@ let currentPage = 1;
 
 /** true cuando el usuario hizo una búsqueda puntual (oculta paginación) */
 let isSearchMode = false;
+
+/** Tipo activo en el filtro. 'all' significa sin filtro. */
+let activeType = "all";
 
 /* ================================================================
    4. FUNCIONES DE LA API
@@ -138,6 +143,29 @@ async function fetchPokemonDetail(nameOrId) {
   }
 
   return res.json();
+}
+
+/**
+ * Obtiene los pokémon de un tipo específico usando el endpoint de tipos.
+ * La API retorna todos los pokémon del tipo; nosotros pedimos detalles
+ * solo de los primeros PAGE_SIZE para no sobrecargar.
+ *
+ * @param {string} type - Nombre del tipo (ej: 'fire', 'water')
+ * @returns {Promise<Array>} Lista de pokémon del tipo solicitado
+ */
+async function fetchPokemonByType(type) {
+  const res = await fetch(`${API_BASE}/type/${type}`);
+  if (!res.ok) throw new Error(`Error al obtener tipo ${type}: ${res.status}`);
+
+  const data = await res.json();
+
+  // La API retorna { pokemon: [{ pokemon: { name, url } }] }
+  // Tomamos solo los primeros PAGE_SIZE para no hacer 100+ requests
+  const slice = data.pokemon.slice(0, PAGE_SIZE);
+  const detailPromises = slice.map((entry) =>
+    fetchPokemonDetail(entry.pokemon.name),
+  );
+  return Promise.all(detailPromises);
 }
 
 /* ================================================================
@@ -501,6 +529,13 @@ searchInput.addEventListener("keydown", (e) => {
 resetBtn.addEventListener("click", () => {
   searchInput.value = "";
   currentPage = 1;
+  activeType = "all";
+  document
+    .querySelectorAll(".type-filter-btn")
+    .forEach((b) => b.classList.remove("active"));
+  document
+    .querySelector('.type-filter-btn[data-type="all"]')
+    .classList.add("active");
   loadDefaultList();
 });
 
@@ -526,8 +561,63 @@ document.addEventListener("keydown", (e) => {
 document.getElementById("site-title").addEventListener("click", () => {
   searchInput.value = "";
   currentPage = 1;
+  activeType = "all";
+  document
+    .querySelectorAll(".type-filter-btn")
+    .forEach((b) => b.classList.remove("active"));
+  document
+    .querySelector('.type-filter-btn[data-type="all"]')
+    .classList.add("active");
   loadDefaultList();
   window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// Filtros por tipo: clic en cualquier chip
+typeFilters.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".type-filter-btn");
+  if (!btn) return; // clic fuera de un botón
+
+  const type = btn.dataset.type;
+  if (type === activeType) return; // ya estaba activo
+
+  // Actualizar estado y estilos del chip activo
+  activeType = type;
+  document
+    .querySelectorAll(".type-filter-btn")
+    .forEach((b) => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  // Limpiar búsqueda y ocultar/mostrar paginación según contexto
+  searchInput.value = "";
+
+  if (type === "all") {
+    // Volver a la lista paginada normal
+    currentPage = 1;
+    isSearchMode = false;
+    await loadDefaultList();
+    return;
+  }
+
+  // Filtro activo: ocultar paginación y mostrar pokémon del tipo
+  pagination.classList.add("hidden");
+  isSearchMode = true;
+  showSkeletons(PAGE_SIZE);
+  setStatus(`Cargando tipo ${type}…`);
+
+  try {
+    const list = await fetchPokemonByType(type);
+    renderPokemonGrid(list);
+    setStatus(`${list.length} pokémon de tipo ${type}`, "success");
+  } catch (error) {
+    pokemonGrid.innerHTML = `
+      <div style="grid-column:1/-1; text-align:center; padding:3rem 1rem; color:var(--text-secondary)">
+        <p style="font-size:3rem; margin-bottom:1rem">😕</p>
+        <p style="font-weight:700; color:var(--text-primary)">Error al filtrar por tipo</p>
+      </div>
+    `;
+    setStatus(`Error al cargar tipo ${type}`, "error");
+    console.error(error);
+  }
 });
 
 /* ================================================================
