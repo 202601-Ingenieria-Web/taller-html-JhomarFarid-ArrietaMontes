@@ -1,0 +1,979 @@
+:root {
+  /* Paleta de colores principal */
+  --bg-base: #0a0a0f; /* Fondo de página */
+  --bg-surface: #13131a; /* Fondo de tarjetas */
+  --bg-elevated: #1c1c28; /* Elementos elevados */
+  --bg-hover: #22223a; /* Hover states */
+
+  --accent-red: #e63946; /* Rojo Pokédex */
+  --accent-red-glow: #e6394640; /* Glow rojo translúcido */
+  --accent-yellow: #ffd166; /* Amarillo acento */
+  --accent-blue: #4cc9f0; /* Azul agua */
+
+  --text-primary: #f0f0f5; /* Texto principal */
+  --text-secondary: #8888aa; /* Texto secundario */
+  --text-muted: #55556a; /* Texto opaco */
+
+  --border-subtle: #22223a; /* Bordes suaves */
+  --border-card: #2a2a40; /* Bordes de tarjeta */
+
+  --font-display:
+    -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 24px 80px rgba(0, 0, 0, 0.8);
+}
+
+/* Colores por tipo de pokémon — usados en badges y acentos */
+.type-fire {
+  --type-color: #ff6b35;
+}
+.type-water {
+  --type-color: #4cc9f0;
+}
+.type-grass {
+  --type-color: #57cc99;
+}
+.type-electric {
+  --type-color: #ffd166;
+}
+.type-psychic {
+  --type-color: #f72585;
+}
+.type-ice {
+  --type-color: #90e0ef;
+}
+.type-dragon {
+  --type-color: #7b2fbe;
+}
+.type-dark {
+  --type-color: #564e57;
+}
+.type-fairy {
+  --type-color: #ff85a1;
+}
+.type-fighting {
+  --type-color: #c77dff;
+}
+.type-poison {
+  --type-color: #9b5de5;
+}
+.type-ground {
+  --type-color: #d4a373;
+}
+.type-rock {
+  --type-color: #b5838d;
+}
+.type-bug {
+  --type-color: #95d5b2;
+}
+.type-ghost {
+  --type-color: #6a0572;
+}
+.type-steel {
+  --type-color: #adb5bd;
+}
+.type-flying {
+  --type-color: #90dbf4;
+}
+.type-normal {
+  --type-color: #adb5bd;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-display);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background-image: radial-gradient(circle, #ffffff08 1px, transparent 1px);
+  background-size: 28px 28px;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: opacity var(--transition);
+}
+
+a:hover {
+  opacity: 0.75;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 99px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 72px;
+  /* Vidrio esmerilado */
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pokeball-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  animation: pokeball-spin 8s linear infinite;
+  flex-shrink: 0;
+}
+
+.site-title {
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  /* Texto con degradado */
+  background: linear-gradient(
+    135deg,
+    var(--text-primary) 0%,
+    var(--accent-red) 80%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.site-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem);
+}
+
+.search-section {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+/* Contenedor del input + botones */
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* Input de búsqueda */
+.search-input {
+  flex: 1;
+  height: 52px;
+  padding: 0 20px;
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* Efecto focus */
+.search-input:focus {
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 4px var(--accent-red-glow);
+}
+
+/* Botón de búsqueda principal */
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 22px;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+.search-btn:hover {
+  background: #c1121f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(230, 57, 70, 0.4);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+}
+
+/* Botón de reset */
+.reset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.reset-btn:hover {
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+  transform: rotate(180deg);
+}
+
+/* Mensaje de estado */
+.status-msg {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  min-height: 1.2em;
+  letter-spacing: 0.02em;
+}
+
+.status-msg.error {
+  color: var(--accent-red);
+}
+.status-msg.success {
+  color: #57cc99;
+}
+
+/* ===================================================
+   5. GRID DE TARJETAS
+   =================================================== */
+.pokemon-grid {
+  display: grid;
+  /* Mínimo 160px por columna, crece automáticamente */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+/* ===================================================
+   6. TARJETAS DE POKÉMON
+   =================================================== */
+.pokemon-card {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+  animation: card-appear 0.4s ease both;
+}
+
+/* Animación escalonada de aparición */
+.pokemon-card:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.pokemon-card:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.pokemon-card:nth-child(3) {
+  animation-delay: 0.09s;
+}
+.pokemon-card:nth-child(4) {
+  animation-delay: 0.12s;
+}
+.pokemon-card:nth-child(5) {
+  animation-delay: 0.15s;
+}
+.pokemon-card:nth-child(6) {
+  animation-delay: 0.18s;
+}
+.pokemon-card:nth-child(7) {
+  animation-delay: 0.21s;
+}
+.pokemon-card:nth-child(8) {
+  animation-delay: 0.24s;
+}
+.pokemon-card:nth-child(9) {
+  animation-delay: 0.27s;
+}
+.pokemon-card:nth-child(10) {
+  animation-delay: 0.3s;
+}
+
+/* Brillo de color del tipo en el fondo de la tarjeta */
+.pokemon-card::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--type-color, var(--accent-red)) 0%,
+    transparent 70%
+  );
+  opacity: 0.07;
+  transition: opacity var(--transition);
+}
+
+/* Pokébola decorativa de fondo */
+.pokemon-card::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 20px solid rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--type-color, var(--accent-red));
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--type-color, var(--accent-red));
+}
+
+.pokemon-card:hover::before {
+  opacity: 0.18;
+}
+
+/* ID del pokémon */
+.card-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+}
+
+/* Imagen del pokémon */
+.card-img-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 12px;
+  height: 96px;
+}
+
+.card-img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  image-rendering: pixelated; /* Mantiene el estilo pixel-art */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  transition: transform var(--transition);
+}
+
+.pokemon-card:hover .card-img {
+  transform: translateY(-4px) scale(1.08);
+}
+
+/* Nombre del pokémon */
+.card-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+/* Badges de tipos */
+.card-types {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.type-badge {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: white;
+  background: var(--type-color, #555);
+  opacity: 0.9;
+}
+
+/* ===================================================
+   7. MODAL — Tarjeta flotante con blur
+   =================================================== */
+
+/* Overlay oscuro que desenfoca el fondo */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  /* Fondo semitransparente */
+  background: rgba(5, 5, 10, 0.75);
+  /* Efecto blur sobre el contenido de la página */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: overlay-in var(--transition) ease;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+/* La tarjeta modal en sí */
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  padding: 32px 28px 28px;
+  box-shadow: var(--shadow-modal);
+  animation: modal-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Scrollbar dentro del modal */
+.modal-card::-webkit-scrollbar {
+  width: 4px;
+}
+.modal-card::-webkit-scrollbar-thumb {
+  background: var(--border-card);
+  border-radius: 99px;
+}
+
+/* Botón de cierre */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--accent-red);
+  color: white;
+  border-color: var(--accent-red);
+  transform: rotate(90deg);
+}
+
+/* Sección superior del modal: imagen + identidad */
+.modal-hero {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-img-wrapper {
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle,
+    var(--type-color, var(--accent-red)) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-card);
+}
+
+.modal-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
+  animation: pokemon-bounce 3s ease-in-out infinite;
+}
+
+.modal-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.modal-name {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  text-transform: capitalize;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.modal-types {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Badges de tipo en el modal (más grandes) */
+.modal-types .type-badge {
+  padding: 5px 14px;
+  font-size: 0.76rem;
+}
+
+/* Datos físicos */
+.modal-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  flex: 1;
+  min-width: 100px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-abilities {
+  flex: 2;
+  min-width: 200px;
+}
+
+.meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.meta-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: capitalize;
+}
+
+/* Sección de estadísticas */
+.stats-title {
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.stats-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-item {
+  display: grid;
+  grid-template-columns: 90px 40px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Barra de progreso de estadística */
+.stat-bar-bg {
+  height: 6px;
+  background: var(--border-card);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--type-color, var(--accent-red));
+  transform-origin: left;
+  animation: bar-grow 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: var(--bar-delay, 0s);
+}
+
+/* ===================================================
+   8. FOOTER
+   =================================================== */
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ===================================================
+   9. ANIMACIONES
+   =================================================== */
+
+/* Aparición de tarjeta al cargar */
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Entrada del overlay */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Entrada del modal con rebote */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Flotación del pokémon en el modal */
+@keyframes pokemon-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Rotación de la pokébola en el header */
+@keyframes pokeball-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Crecimiento de las barras de estadísticas */
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Animación del skeleton loader */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* Skeleton loader */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-elevated) 50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-card);
+}
+
+.skeleton-card {
+  height: 220px;
+}
+
+/* ===================================================
+   10. RESPONSIVIDAD
+   =================================================== */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .search-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex-basis: 100%;
+  }
+
+  .search-btn {
+    flex: 1;
+  }
+
+  .pokemon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .modal-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .modal-img-wrapper {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+  .site-header {
+    flex-direction: column;
+    height: auto;
+    padding: 14px 1.25rem;
+    gap: 2px;
+  }
+
+  .site-subtitle {
+    display: none;
+  }
+
+  .pokemon-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .modal-card {
+    padding: 24px 18px 20px;
+    border-radius: var(--radius-lg);
+  }
+
+  .stat-item {
+    grid-template-columns: 80px 36px 1fr;
+    gap: 8px;
+  }
+}
+
+/* ===================================================
+   PAGINACIÓN
+   =================================================== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+/* Botones anterior / siguiente */
+.page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+  transform: translateY(-2px);
+}
+
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Contenedor de números de página */
+.page-numbers {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Cada número de página */
+.page-number {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.page-number:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+/* Página activa */
+.page-number.active {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(230, 57, 70, 0.35);
+}
+
+/* Ellipsis "..." */
+.page-ellipsis {
+  min-width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: default;
+}
+
+/* Ocultar paginación durante búsquedas individuales */
+.pagination.hidden {
+  display: none;
+}
