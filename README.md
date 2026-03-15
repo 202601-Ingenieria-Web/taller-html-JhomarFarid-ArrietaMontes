@@ -1,26 +1,29 @@
 # PokéDex
- 
+
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![PokéAPI](https://img.shields.io/badge/PokéAPI-EF5350?style=for-the-badge&logo=pokemon&logoColor=white)
- 
+
 Aplicación web interactiva que consume la **PokéAPI** para explorar, buscar y filtrar pokémon. Desarrollada con HTML, CSS y JavaScript vanilla
- 
 
 ## Capturas de pantalla
 
 ### Vista principal
 
+![Preview](img/preview1.png)
 
 ### Búsqueda de pokémon
 
+![Preview](img/preview2.png)
 
 ### Filtro por tipo
 
+![Preview](img/preview3.png)
 
-### Detalle del pokémon 
+### Detalle del pokémon
 
+![Preview](img/preview4.png)
 
 ---
 
@@ -58,11 +61,13 @@ taller-html-nombre-apellidos/
 No requiere instalación ni dependencias. Solo abre `index.html` en el navegador.
 
 Si usas VS Code, la forma más cómoda es con la extensión **Live Server**:
+
 1. Clic derecho sobre `index.html`
-2. Selecciona *"Open with Live Server"*
+2. Selecciona _"Open with Live Server"_
 3. Se abre en `http://127.0.0.1:5500`
 
 También funciona con Python:
+
 ```bash
 python -m http.server 8000
 # Luego abre http://localhost:8000
@@ -74,11 +79,11 @@ python -m http.server 8000
 
 **PokéAPI** — `https://pokeapi.co/api/v2/`
 
-| Endpoint | Uso |
-|---|---|
-| `/pokemon?limit=20&offset=N` | Lista paginada de pokémon |
-| `/pokemon/{nombre_o_id}` | Detalles de un pokémon específico |
-| `/type/{tipo}` | Pokémon filtrados por tipo |
+| Endpoint                     | Uso                               |
+| ---------------------------- | --------------------------------- |
+| `/pokemon?limit=20&offset=N` | Lista paginada de pokémon         |
+| `/pokemon/{nombre_o_id}`     | Detalles de un pokémon específico |
+| `/type/{tipo}`               | Pokémon filtrados por tipo        |
 
 No requiere autenticación ni API key.
 
@@ -91,5 +96,3 @@ No requiere autenticación ni API key.
 - JavaScript ES2020+ (async/await, optional chaining, Promise.all)
 - [PokéAPI](https://pokeapi.co) — API REST pública
 - [Google Fonts](https://fonts.google.com) — Hanken Grotesk + Inter
-
-
